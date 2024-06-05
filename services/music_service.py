@@ -3,7 +3,22 @@ from models.music_models import Music
 import random
 
 # DATABASE
-from core.constants import SONGS_DB
+from psycopg2 import connect
+from psycopg2.extras import RealDictCursor
+psql_conn = None
+
+try:
+    conn = connect(
+        dbname='music_db',
+        user='abhinav',
+        password='password',
+        port='5432',
+        cursor_factory=RealDictCursor
+    )
+    psql_conn = conn.cursor()
+    print('Connected to the database')
+except Exception as e:
+    print(f'An error occurred: {e}')
 ##
 
 def get_top_music_unauthenticated(offset: int = 0, limit: int = 5):
@@ -19,7 +34,15 @@ def get_top_music_unauthenticated(offset: int = 0, limit: int = 5):
     music_list = list[Music]
     
     # Buisness Logic
-    music_list = SONGS_DB[offset:offset+limit]
+    query = f"SELECT * FROM music LIMIT {limit} OFFSET {offset}"
+    psql_conn.execute(query)
+    query_result = psql_conn.fetchall()
+    print(query_result)
+    music_list = query_result
+
+    # Convert the query result to a list of Music objects
+    # for the API to return
+    music_list = [Music(**music) for music in music_list]
 
     return music_list
 

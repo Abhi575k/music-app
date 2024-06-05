@@ -5,12 +5,12 @@ from services.music_service import get_top_music_unauthenticated, get_genre_musi
 
 
 # DATABASE
-from core.constants import MUSIC_GENRE, SONGS_DB
+
 ##
 
 router = APIRouter()
 
-@router.get("/", status_code=200, response_model=list[Music])
+@router.get("/", status_code=200)
 async def read_music(offset: int = 0, limit: int = 5):
     '''
     Function to return the list of music
@@ -24,7 +24,7 @@ async def read_music(offset: int = 0, limit: int = 5):
     listening history and a few random ones.
     '''
     music_list = get_top_music_unauthenticated(offset, limit)
-    return music_list
+    return {"music": music_list}
 
 @router.get("/genre/{genre}", status_code=200, response_model=list[Music])
 async def read_music_by_genre(genre: str, offset: int = 0, limit: int = 5):
@@ -38,6 +38,6 @@ async def read_music_by_genre(genre: str, offset: int = 0, limit: int = 5):
     music_list = get_genre_music_unauthenticated(genre, offset, limit)
     return music_list
 
-@router.get("/genre", status_code=200)
-async def read_music_genre():
-    return {"music": MUSIC_GENRE}
+# @router.get("/genre", status_code=200)
+# async def read_music_genre():
+#     return {"music": MUSIC_GENRE}
