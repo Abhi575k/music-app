@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from datetime import datetime
 
 class Music(BaseModel):
     '''
@@ -18,7 +19,7 @@ class Artist(BaseModel):
     '''
     artist_id: int
     name: str
-    popularity: int
+    popularity: float
 
 class Album(BaseModel):
     '''
@@ -27,8 +28,8 @@ class Album(BaseModel):
     album_id: int
     title: str
     artist_id: int
-    release_date: str
-    popularity: int
+    release_date: datetime
+    popularity: float
 
 class Genre(BaseModel):
     '''
@@ -36,7 +37,7 @@ class Genre(BaseModel):
     '''
     genre_id: int
     name: str
-    popularity: int
+    popularity: float
 
 class PlaylistMusic(BaseModel):
     '''
